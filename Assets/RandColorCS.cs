@@ -40,6 +40,87 @@ public class RandColorCS : MonoBehaviour
     private static float seconds = 60;
     private static float miliseconds = 1000;
 
+void FixedUpdate()
+    {
+        if (playtime)
+        {
+            totalTime += Time.deltaTime;
+            minutes = (int)(totalTime / 60);
+            seconds = (int)(totalTime % 60);
+            miliseconds = (int)(totalTime * 1000) % 1000;
+            tempo.text = minutes.ToString() + " : " + seconds.ToString() + " : " + miliseconds.ToString();
+        }
+        else
+        {
+            tempo.text = "00:00:00";
+            totalTime = 0;
+        }
+    }
+
+    void OnGUI()
+    {
+        if (data == null)
+        {
+            if (GUI.Button(new Rect(0, 0, 100, 50), "Create"))
+            {
+                createCube();
+            }
+        }
+
+        if (data != null)
+        {
+            if (GUI.Button(new Rect(110, 0, 100, 50), "Random CPU"))
+            {
+                cpu = true;
+                gpu = false;
+
+                totalTime = 0;
+                playtime = true;
+
+                for (int i = 0; i < gameObjects.Length; i++)
+                    {
+                        Destroy(gameObjects[i]);
+                      //  gameObjects[i].GetComponent<MeshRenderer>().material.SetColor("_Color", Random.ColorHSV());
+                    }
+
+                createCube();
+            }
+        }
+
+        if (data != null)
+        {
+            if (GUI.Button(new Rect(220, 0, 100, 50), "Random GPU"))
+            {
+                cpu = false;
+                gpu = true;
+
+                totalTime = 0;
+                playtime = true;
+
+                int totalSize = 4 * sizeof(float) + 3 * sizeof(float);
+
+                ComputeBuffer computeBuffer = new ComputeBuffer(data.Length, totalSize);
+                computeBuffer.SetData(data);
+
+                computeShader.SetBuffer(0, "cubes", computeBuffer);
+                computeShader.SetInt("iteraction", iteractions);
+
+                computeShader.Dispatch(0, data.Length / 10, 1, 1);
+
+                computeBuffer.GetData(data);
+
+                for (int i = 0; i < gameObjects.Length; i++)
+                {
+                    Destroy(gameObjects[i]);
+                    //gameObjects[i].GetComponent<MeshRenderer>().material.SetColor("_Color", Random.ColorHSV());
+                }
+
+                createCube();
+                computeBuffer.Dispose();
+            }
+        }
+    }
+
     private void createCube()
     {
         data = new Cube[count * count];
