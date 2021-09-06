@@ -44,3 +44,31 @@ public class CollisionColorChange : MonoBehaviour
                 }
             }
         }
+        else if (gpu == true)
+        {
+            Debug.Log(RandColorCS.totalTime);
+
+            data = new Cube[count * count];
+
+            int totalSize = 4 * sizeof(float) + 3 * sizeof(float);
+
+            ComputeBuffer computeBuffer = new ComputeBuffer(data.Length, totalSize);
+            computeBuffer.SetData(data);
+
+            computeShader.SetBuffer(0, "cubes", computeBuffer);
+            computeShader.SetInt("iteraction", iteractions);
+
+            computeShader.Dispatch(0, data.Length / 10, 1, 1);
+
+            computeBuffer.GetData(data);
+
+            for (int i = 0; i < count; i++)
+            {
+                Color _color = Random.ColorHSV();
+                this.GetComponent<MeshRenderer>().material.SetColor("_Color", _color);
+            }
+
+            computeBuffer.Dispose();
+        }
+    }
+}
