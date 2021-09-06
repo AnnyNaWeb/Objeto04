@@ -1,0 +1,22 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain  //função CSMain é o kernel
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result; //tipo de dado que permite fazer acesso a seus elementos x e y (posso ler e gravar nessa area de memoria), textura de 4 canais 
+//textura 2d que tem 4 canais
+//transformando representação de cor em valor normalizado
+float resolution; //textura 8 po 8 a resolucao é 8
+[numthreads(8,8,1)]//todo código em GPU executa em um conjunto de thread Warp(em blocos) define o tamanho do bloco essa instrução quantidade de thread no eixo x, y e z
+//se multiplicar 8x8 temos 64 threads que a gnt ta definindo (64 pixels)
+//coordenada de thread varia de 0 a 7 mas 7 fica fora do valor de cor, precisa normalizar a coordenada com valores entre 0 e 1
+//nao tem ordem de execucao das threads
+void CSMain (uint3 id : SV_DispatchThreadID) //GPU tem area de momoria reservada DRAM e a CPU tem a RAM que ja conhecemos
+//temos que fazer copia dos dados que estao na memoria de CPU para GPU
+{
+    float _x = id.x/resolution; //valor normalizado e variavel a ser configurada no programa
+    float _y = id.y/resolution;
+   Result[id.xy] = float4(_x, _y, 0, 1);//RGB gradiente (o x y varia de 0 ate 7 pra cada dimensao dessa)
+
+   // Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+}
