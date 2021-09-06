@@ -40,4 +40,34 @@ public class RandColorCS : MonoBehaviour
     private static float seconds = 60;
     private static float miliseconds = 1000;
 
+    private void createCube()
+    {
+        data = new Cube[count * count];
+        gameObjects = new GameObject[count * count];
+
+        for (int i = 0; i < count; i++)
+        {
+            float offsetX = (-count / 2 + i);
+
+            for (int j = 0; j < count; j++)
+            {
+                float offsetY = (-count / 2 + j);
+
+                //Color _color = Random.ColorHSV();
+
+                GameObject go = GameObject.Instantiate(modelPref, new Vector3(offsetX * 0.7f, 3, offsetY * 0.7f), Quaternion.identity);
+               // go.GetComponent<MeshRenderer>().material.SetColor("_Color", _color);
+                go.GetComponent<Rigidbody>().drag = Random.Range(velocidadeMin, velocidadeMax);
+                go.GetComponent<Rigidbody>().mass = Random.Range(1, massa);
+
+                gameObjects[i * count + j] = go;
+
+                data[i * count + j] = new Cube();
+                data[i * count + j].position = go.transform.position;
+                //data[i * count + j].color = _color;
+            }
+        }
+    }
+}
+
     
