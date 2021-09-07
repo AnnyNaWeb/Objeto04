@@ -126,5 +126,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d846ce6076afe42a0e7e6949885b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  computeShader: {fileID: 0}
+  computeShader: {fileID: 7200000, guid: aca80c15f65303e49a59454802961d4b, type: 3}
   countobj: 0

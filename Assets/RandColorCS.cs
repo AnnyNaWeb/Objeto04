@@ -40,7 +40,7 @@ public class RandColorCS : MonoBehaviour
     private static float seconds = 60;
     private static float miliseconds = 1000;
 
-void FixedUpdate()
+    void FixedUpdate()
     {
         if (playtime)
         {
@@ -78,10 +78,10 @@ void FixedUpdate()
                 playtime = true;
 
                 for (int i = 0; i < gameObjects.Length; i++)
-                    {
-                        Destroy(gameObjects[i]);
-                      //  gameObjects[i].GetComponent<MeshRenderer>().material.SetColor("_Color", Random.ColorHSV());
-                    }
+                {
+                    Destroy(gameObjects[i]);
+                    //  gameObjects[i].GetComponent<MeshRenderer>().material.SetColor("_Color", Random.ColorHSV());
+                }
 
                 createCube();
             }
@@ -137,7 +137,7 @@ void FixedUpdate()
                 //Color _color = Random.ColorHSV();
 
                 GameObject go = GameObject.Instantiate(modelPref, new Vector3(offsetX * 0.7f, 3, offsetY * 0.7f), Quaternion.identity);
-               // go.GetComponent<MeshRenderer>().material.SetColor("_Color", _color);
+                // go.GetComponent<MeshRenderer>().material.SetColor("_Color", _color);
                 go.GetComponent<Rigidbody>().drag = Random.Range(velocidadeMin, velocidadeMax);
                 go.GetComponent<Rigidbody>().mass = Random.Range(1, massa);
 
@@ -150,5 +150,3 @@ void FixedUpdate()
         }
     }
 }
-
-    
